@@ -27,7 +27,7 @@ public class TeleOp extends LinearOpMode {
         rotate = gamepad1.right_stick_x;
         drive.driveFieldRelative(forward, strafe, rotate);
 
-        if(gamepad1.right_trigger >= 0.8) {
+        if(gamepad2.right_trigger >= 0.8) {
             ConstantValues.driveMaxSpeed = 0.3;
         } else {
             ConstantValues.driveMaxSpeed = 1.0;
@@ -37,13 +37,15 @@ public class TeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
         telemetry.addLine("Initialized");
-        intake.init(hardwareMap);
+        drive.init(hardwareMap);
+        //intake.init(hardwareMap);
         waitForStart();
         while(opModeIsActive() && !isStopRequested()){
             telemetry.addLine("OpMode is active");
             setOperator();
-            setDriver();
+            if(gamepad2.left_trigger >= 0.7){
+                setDriver();
+            }
         }
     }
-
 }
