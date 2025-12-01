@@ -9,10 +9,20 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.Mechanisms.IntakeConfig;
+import org.firstinspires.ftc.teamcode.Mechanisms.Kicker;
+import org.firstinspires.ftc.teamcode.Mechanisms.ShootingConfig;
+import org.firstinspires.ftc.teamcode.Mechanisms.StorageConfig;
 import org.firstinspires.ftc.teamcode.PedroPathing.Constants;
 
-@Autonomous
+@Autonomous(name = "BLUE AUTO TOP")
 public class BlueAutoTop extends OpMode {
+
+    // TODO add all the paths to finish blue auto top and build them and add to state machine
+    private StorageConfig sorter = new StorageConfig();
+    private ShootingConfig shooter = new ShootingConfig();
+    private Kicker kick = new Kicker();
+    private IntakeConfig intake = new IntakeConfig();
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
@@ -22,8 +32,8 @@ public class BlueAutoTop extends OpMode {
         // SHOOT > ATTEMPT TO SCORE THE ARTIFACT
         DRIVE_STARTPOS_SHOOT_POS,
         SHOOT_PRELOAD,
-
-        DRIVE_SHOOTPOS_BPICKUP // BPICKUP is begin pickup and EPICKUP is end pickup
+        DRIVE_BPICKUP_FPICKUP, // BPICKUP is begin pickup and EPICKUP is end pickup
+        DRIVE_PICKUP1_SHOOT_POS
     }
 
     PathState pathState;
@@ -32,8 +42,9 @@ public class BlueAutoTop extends OpMode {
     private final Pose shootPose = new Pose(47.55192532088682, 95.77596266044341, Math.toRadians(130));
 
     private final Pose beginPickup1 = new Pose(47.71995332555426, 84.18203033838974, Math.toRadians(180));
+    private final Pose finalPickup1 = new Pose(14.786464410735121, 83.84597432905484, Math.toRadians(180));
 
-    private PathChain driveStartPosShootPos, driveShootPosBPickupPos;
+    private PathChain driveStartPosShootPos, driveShootPosBPickupPos, driveBPoseFPose;
 
     public void buildPaths() {
         // put in coordinates for starting pose > ending pose
@@ -46,6 +57,11 @@ public class BlueAutoTop extends OpMode {
                 .addPath(new BezierLine(shootPose, beginPickup1))
                 .setLinearHeadingInterpolation(shootPose.getHeading(), beginPickup1.getHeading())
                 .build();
+
+        driveBPoseFPose = follower.pathBuilder()
+                .addPath(new BezierLine(beginPickup1, finalPickup1))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
     }
 
     public void statePathUpdate() {
@@ -56,17 +72,28 @@ public class BlueAutoTop extends OpMode {
                 setPathState(PathState.SHOOT_PRELOAD); // reset timer and make a new state
                 break;
             case SHOOT_PRELOAD:
-                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 5){ // not using sleep as it stops the whole thread so using timer instead
-                    // TODO add shooter to shoot
+                if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1){ // not using sleep as it stops the whole thread so using timer instead
+                    firingPre();
                     telemetry.addLine("Shooting");
-                    // transition to next state
-                    follower.followPath(driveShootPosBPickupPos, true);
-                    setPathState(PathState.DRIVE_SHOOTPOS_BPICKUP);
+                    if(pathTimer.getElapsedTimeSeconds() > 9) {
+                        // transition to next state
+                        follower.followPath(driveShootPosBPickupPos, true);
+                        telemetry.addLine("Going to intake");
+                        shooter.Stop();
+                        setPathState(PathState.DRIVE_BPICKUP_FPICKUP);
+                    }
                 }
                 break;
-            case DRIVE_SHOOTPOS_BPICKUP:
+            case DRIVE_BPICKUP_FPICKUP:
                 if(!follower.isBusy()) {
-                    telemetry.addLine("About to start pickup 1");
+                    intake.intakeMax();
+                    if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() >= 0.25) {
+                        follower.setMaxPower(0.25);
+                        telemetry.addLine("Intaking");
+                        follower.followPath(driveBPoseFPose, true);
+                        telemetry.addLine("Going to shoot");
+                        setPathState(PathState.DRIVE_PICKUP1_SHOOT_POS);
+                    }
                 }
             default:
                 telemetry.addLine("Not in any state");
@@ -79,20 +106,59 @@ public class BlueAutoTop extends OpMode {
         pathTimer.resetTimer();
     }
 
+    public void firingPre() {
+        telemetry.addData("Time", pathTimer.getElapsedTimeSeconds());
+        if (pathTimer.getElapsedTimeSeconds() > 3 && pathTimer.getElapsedTimeSeconds() < 3.7) {
+            telemetry.addLine("Kicking");
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 3.7 && pathTimer.getElapsedTimeSeconds() < 4.4) {
+            kick.retract();
+        }
+        if(pathTimer.getElapsedTimeSeconds() > 4.4 && pathTimer.getElapsedTimeSeconds() < 4.7){
+            sorter.setOutC();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 4.7 && pathTimer.getElapsedTimeSeconds() < 5.4) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 5.4 && pathTimer.getElapsedTimeSeconds() < 6.1) {
+            kick.retract();
+        }
+        if(pathTimer.getElapsedTimeSeconds() > 6.1 && pathTimer.getElapsedTimeSeconds() < 6.4){
+            sorter.setOutB();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 6.4 && pathTimer.getElapsedTimeSeconds() < 7.1) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 7.1 && pathTimer.getElapsedTimeSeconds() < 7.8) {
+            kick.retract();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 7.8) {
+            sorter.setIntakeA();
+        }
+    }
+
     @Override
     public void init() {
         pathState = PathState.DRIVE_STARTPOS_SHOOT_POS;
         pathTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
+        shooter.init(hardwareMap);
+        sorter.init(hardwareMap);
+        kick.init(hardwareMap);
+        intake.init(hardwareMap);
         // TODO add any other subsystems
-
         buildPaths();
         follower.setPose(startPose);
     }
 
     @Override
     public void start() {
+        shooter.hoodClose();
+        kick.retract();
+        shooter.CloseOut();
+        sorter.setOutA();
         opModeTimer.resetTimer();
         setPathState(pathState);
     }

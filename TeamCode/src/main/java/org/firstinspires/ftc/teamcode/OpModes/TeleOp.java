@@ -5,20 +5,32 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Mechanisms.ConstantValues;
 import org.firstinspires.ftc.teamcode.Mechanisms.IntakeConfig;
 import org.firstinspires.ftc.teamcode.Mechanisms.MecanumDrivebase;
+import org.firstinspires.ftc.teamcode.Mechanisms.ShootingConfig;
+import org.firstinspires.ftc.teamcode.Mechanisms.StorageConfig;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp")
 public class TeleOp extends LinearOpMode {
     MecanumDrivebase drive = new MecanumDrivebase();
     IntakeConfig intake = new IntakeConfig();
+    StorageConfig sorter = new StorageConfig();
+    ShootingConfig shooter = new ShootingConfig();
 
     double forward, strafe, rotate;
     public void setOperator(){
-        if(gamepad2.left_trigger > 0.7){
+        if(gamepad2.left_trigger >= 0.7){
             intake.intakeMax();
         }else if(gamepad2.dpad_up){
             intake.reverseIntake();
         }else{
             intake.intakeStop();
+        }
+
+        if(gamepad2.a){
+            sorter.setOutA();
+        } else if(gamepad2.b){
+            sorter.setOutB();
+        } else if(gamepad2.x){
+            sorter.setOutC();
         }
     }
     public void setDriver(){
@@ -32,20 +44,26 @@ public class TeleOp extends LinearOpMode {
         } else {
             ConstantValues.driveMaxSpeed = 1.0;
         }
+
+        if(gamepad1.dpad_up){
+            shooter.hoodZero();
+        } else if(gamepad1.dpad_down) {
+            drive.imu.resetYaw();
+        }
     }
 
     @Override
     public void runOpMode() throws InterruptedException{
         telemetry.addLine("Initialized");
         drive.init(hardwareMap);
-        //intake.init(hardwareMap);
+        intake.init(hardwareMap);
+        sorter.init(hardwareMap);
+        shooter.init(hardwareMap);
         waitForStart();
         while(opModeIsActive() && !isStopRequested()){
             telemetry.addLine("OpMode is active");
+            setDriver();
             setOperator();
-            if(gamepad2.left_trigger >= 0.7){
-                setDriver();
-            }
         }
     }
 }
