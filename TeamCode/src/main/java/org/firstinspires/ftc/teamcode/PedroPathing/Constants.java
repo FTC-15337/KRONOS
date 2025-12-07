@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
+    //Pedro pathing package should not be touched - all values have been tuned
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(12.8)
             .forwardZeroPowerAcceleration(-34.54337012665038)

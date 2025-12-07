@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.ConstantValues;
-public class Constants {
+public class ConstantValues {
     //push
     public static double driveMaxSpeed = 0.75;
     public static double driveMaxPower = 1.0;
@@ -15,10 +15,4 @@ public class Constants {
     public static double intakeRev = -1.0;
     public static double kick = 0.18;
     public static double retract = 0.45;
-
-    /*public static double outPos1 = 1.0;
-    public static double outPos2 = 0.75; //med
-    public static double outPos3 = 0.865; //far
-    public static double outPos4 = 0.7;//close
-    public static double humanPlayerIntake = 0.01;*/
 }

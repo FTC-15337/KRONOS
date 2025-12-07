@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.ConstantValues.Constants;
+import org.firstinspires.ftc.teamcode.ConstantValues.ConstantValues;
 
 public class IntakeConfig {
     private DcMotor intakeMotorRight;
@@ -26,19 +26,19 @@ public class IntakeConfig {
     }
 
     public void IntakeMotorStop(){
-        intakeMotorRight.setPower(Constants.intakeStop);
-        intakeMotorLeft.setPower(Constants.intakeStop);
+        intakeMotorRight.setPower(ConstantValues.intakeStop);
+        intakeMotorLeft.setPower(ConstantValues.intakeStop);
     }
 
 
     public void IntakeMotorMax(){
-        intakeMotorRight.setPower(Constants.intakeMax);
-        intakeMotorLeft.setPower(Constants.intakeMax);
+        intakeMotorRight.setPower(ConstantValues.intakeMax);
+        intakeMotorLeft.setPower(ConstantValues.intakeMax);
     }
 
     public void OutIntake(){
-        intakeMotorRight.setPower(Constants.intakeRev);
-        intakeMotorLeft.setPower(Constants.intakeRev);
+        intakeMotorRight.setPower(ConstantValues.intakeRev);
+        intakeMotorLeft.setPower(ConstantValues.intakeRev);
     }
     public void intake(){
         ElapsedTime timer = new ElapsedTime();

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Mechanisms;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.ConstantValues.Constants;
+import org.firstinspires.ftc.teamcode.ConstantValues.ConstantValues;
 
 public class StorageConfig {
 
@@ -16,27 +16,27 @@ public class StorageConfig {
     ServoKick kick = new ServoKick();
     public void setIntakeA(){
 
-        storageServo.setPosition(Constants.sorterIntakeA);
+        storageServo.setPosition(ConstantValues.sorterIntakeA);
     }
     public void setIntakeB(){
 
-        storageServo.setPosition(Constants.sorterIntakeB);
+        storageServo.setPosition(ConstantValues.sorterIntakeB);
     }
     public void setIntakeC(){
 
-        storageServo.setPosition(Constants.sorterIntakeC);
+        storageServo.setPosition(ConstantValues.sorterIntakeC);
     }
     public void setOutA(){
 
-        storageServo.setPosition(Constants.sorterOutTakeA);
+        storageServo.setPosition(ConstantValues.sorterOutTakeA);
     }
     public void setOutB(){
 
-        storageServo.setPosition(Constants.sorterOutTakeB);
+        storageServo.setPosition(ConstantValues.sorterOutTakeB);
     }
     public void setOutC(){
 
-        storageServo.setPosition(Constants.sorterOutTakeC);
+        storageServo.setPosition(ConstantValues.sorterOutTakeC);
     }
 
     public void setZero(){
