@@ -23,10 +23,10 @@ public class TeleOp extends LinearOpMode {
     LimelightConfig ll = new LimelightConfig();
     Led led = new Led();
     ElapsedTime kickTimer = new ElapsedTime();
+    ElapsedTime ledTimer = new ElapsedTime();
     double forward, strafe, rotate;
 
     public void setDriver() {
-        led.startLed();
         forward = -gamepad1.left_stick_y;
         strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
@@ -178,6 +178,8 @@ public class TeleOp extends LinearOpMode {
         kick.init(hardwareMap);
         led.init(hardwareMap);
         ll.init(hardwareMap);
+        ledTimer.reset();
+
 
         drive.imu.resetYaw();
 
@@ -186,6 +188,11 @@ public class TeleOp extends LinearOpMode {
         while (!isStopRequested() && opModeIsActive()) {
             setDriver();
             setOperator();
+            if(ledTimer.seconds() >= 102){
+                led.startLed();
+            } else {
+                led.stopLed();
+            }
 
             telemetry.addData("aligned", Math.abs(ll.getTx()) < 1);
 

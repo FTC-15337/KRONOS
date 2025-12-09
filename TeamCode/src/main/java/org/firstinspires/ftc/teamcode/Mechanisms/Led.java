@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Mechanisms;
 
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -11,7 +12,10 @@ public class Led {
 
     }
     public void startLed(){
-        led.setPosition(1.0);
+        led.setPosition(0.28);
+    }
+    public void stopLed(){
+        led.setPosition(0.0);
     }
 }
 
