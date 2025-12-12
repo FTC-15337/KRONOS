@@ -50,8 +50,8 @@ public class BlueAutoTop extends OpMode {
     private final Pose beginPickup1 = new Pose(47.71995332555426, 84.18203033838974, Math.toRadians(180));
     private final Pose finalPickup1 = new Pose(15.786464410735121, 83.84597432905484, Math.toRadians(180));
 
-    private final Pose beginPickup2 = new Pose(47.38389731621937, 59.649941656942815, Math.toRadians(180));
-    private final Pose finalPickup2 = new Pose(4, 59.649941656942815, Math.toRadians(180));
+    private final Pose beginPickup2 = new Pose(47.38389731621937, 62, Math.toRadians(180));
+    private final Pose finalPickup2 = new Pose(4, 62, Math.toRadians(180));
     private final Pose midCurveFPickupShoot = new Pose(45.26829268292683, 36.8780487804878);
     private final Pose leave = new Pose(52.68292682926829, 126.82926829268293, Math.toRadians(180));
 
@@ -323,7 +323,7 @@ public class BlueAutoTop extends OpMode {
 
     @Override
     public void start() {
-        shooter.hoodClose();
+        shooter.hoodAutoClose();
         kick.retract();
         shooter.CloseOut();
         sorter.setOutA();

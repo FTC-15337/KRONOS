@@ -26,9 +26,9 @@ public class ShooterConfig {
     public void hoodFar(){hood.setPosition(0.57);}
     public void hoodMed(){hood.setPosition(0.6);}
     public void hoodClose(){hood.setPosition(0.8);}
+    public void hoodAutoClose(){hood.setPosition(0.85);}
     public void hoodZero(){hood.setPosition(0.0);}
     public void hoodAutoFar(){hood.setPosition(0.57);}
-    //0.63 for hood auto top
 
     public double velocityValue(){
         return shooter.getVelocity();
