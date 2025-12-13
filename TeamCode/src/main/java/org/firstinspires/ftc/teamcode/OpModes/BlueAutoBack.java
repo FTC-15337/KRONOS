@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Mechanisms.IntakeConfig;
+import org.firstinspires.ftc.teamcode.Mechanisms.LimelightConfig;
 import org.firstinspires.ftc.teamcode.Mechanisms.MecDrivebase;
 import org.firstinspires.ftc.teamcode.Mechanisms.ServoKick;
 import org.firstinspires.ftc.teamcode.Mechanisms.ShooterConfig;
@@ -24,6 +25,7 @@ public class BlueAutoBack extends OpMode {
     private MecDrivebase drive = new MecDrivebase();
     private Follower follower;
     private Timer pathTimer, opModeTimer;
+    LimelightConfig ll = new LimelightConfig();
 
     public enum PathState {
         // START POSITION_END POSITION
@@ -108,7 +110,14 @@ public class BlueAutoBack extends OpMode {
                 break;
             case SHOOT_PRELOAD:
                 if(!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2){
-                    firingPre();
+                    if(ll.getId() == 21){
+                        sorter.setOutC();
+                        GPP();
+                    }else if(ll.getId() == 22){
+                        PGP();
+                    }else if(ll.getId() == 23){
+                        PPG();
+                    }
                     telemetry.addLine("Shooting");
                     if(pathTimer.getElapsedTimeSeconds() > 8.5){
                         follower.followPath(driveShootPosBPickupPos);
@@ -203,6 +212,37 @@ public class BlueAutoBack extends OpMode {
         pathTimer.resetTimer();
     }
 
+    public void firingOne() {
+        telemetry.addData("Time", pathTimer.getElapsedTimeSeconds());
+        if (pathTimer.getElapsedTimeSeconds() > 1.8 && pathTimer.getElapsedTimeSeconds() < 2.5) {
+            telemetry.addLine("Kicking");
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 2.5 && pathTimer.getElapsedTimeSeconds() < 3.2) {
+            kick.retract();
+        }
+        if(pathTimer.getElapsedTimeSeconds() > 3.2 && pathTimer.getElapsedTimeSeconds() < 3.6){
+            sorter.setOutC();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 3.6 && pathTimer.getElapsedTimeSeconds() < 4.3) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 4.3 && pathTimer.getElapsedTimeSeconds() < 5.0) {
+            kick.retract();
+        }
+        if(pathTimer.getElapsedTimeSeconds() > 5.0 && pathTimer.getElapsedTimeSeconds() < 5.4){
+            sorter.setOutB();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 5.4 && pathTimer.getElapsedTimeSeconds() < 6.1) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 6.1 && pathTimer.getElapsedTimeSeconds() < 6.8) {
+            kick.retract();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 6.8) {
+            sorter.setIntakeA();
+        }
+    }
     public void firingPre() {
         telemetry.addData("Time", pathTimer.getElapsedTimeSeconds());
         if (pathTimer.getElapsedTimeSeconds() > 3.5 && pathTimer.getElapsedTimeSeconds() < 4.2) {
@@ -234,34 +274,97 @@ public class BlueAutoBack extends OpMode {
             sorter.setIntakeA();
         }
     }
-    public void firingOne() {
+
+    public void PPG() {
         telemetry.addData("Time", pathTimer.getElapsedTimeSeconds());
-        if (pathTimer.getElapsedTimeSeconds() > 1.8 && pathTimer.getElapsedTimeSeconds() < 2.5) {
+        if (pathTimer.getElapsedTimeSeconds() > 3.5 && pathTimer.getElapsedTimeSeconds() < 4.2) {
             telemetry.addLine("Kicking");
             kick.kick();
         }
-        if (pathTimer.getElapsedTimeSeconds() > 2.5 && pathTimer.getElapsedTimeSeconds() < 3.2) {
+        if (pathTimer.getElapsedTimeSeconds() > 4.2 && pathTimer.getElapsedTimeSeconds() < 4.9) {
             kick.retract();
         }
-        if(pathTimer.getElapsedTimeSeconds() > 3.2 && pathTimer.getElapsedTimeSeconds() < 3.6){
-            sorter.setOutC();
-        }
-        if (pathTimer.getElapsedTimeSeconds() > 3.6 && pathTimer.getElapsedTimeSeconds() < 4.3) {
-            kick.kick();
-        }
-        if (pathTimer.getElapsedTimeSeconds() > 4.3 && pathTimer.getElapsedTimeSeconds() < 5.0) {
-            kick.retract();
-        }
-        if(pathTimer.getElapsedTimeSeconds() > 5.0 && pathTimer.getElapsedTimeSeconds() < 5.4){
+        if(pathTimer.getElapsedTimeSeconds() > 4.9 && pathTimer.getElapsedTimeSeconds() < 5.3){
             sorter.setOutB();
         }
-        if (pathTimer.getElapsedTimeSeconds() > 5.4 && pathTimer.getElapsedTimeSeconds() < 6.1) {
+        if (pathTimer.getElapsedTimeSeconds() > 5.3 && pathTimer.getElapsedTimeSeconds() < 6.0) {
             kick.kick();
         }
-        if (pathTimer.getElapsedTimeSeconds() > 6.1 && pathTimer.getElapsedTimeSeconds() < 6.8) {
+        if (pathTimer.getElapsedTimeSeconds() > 6.0 && pathTimer.getElapsedTimeSeconds() < 6.7) {
             kick.retract();
         }
-        if (pathTimer.getElapsedTimeSeconds() > 6.8) {
+        if(pathTimer.getElapsedTimeSeconds() > 6.7 && pathTimer.getElapsedTimeSeconds() < 7.1){
+            sorter.setOutC();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 7.1 && pathTimer.getElapsedTimeSeconds() < 7.8) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 7.8 && pathTimer.getElapsedTimeSeconds() < 8.5) {
+            kick.retract();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 8.5) {
+            sorter.setIntakeA();
+        }
+    }
+    public void PGP() {
+        telemetry.addData("Time", pathTimer.getElapsedTimeSeconds());
+        if (pathTimer.getElapsedTimeSeconds() > 3.5 && pathTimer.getElapsedTimeSeconds() < 4.2) {
+            telemetry.addLine("Kicking");
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 4.2 && pathTimer.getElapsedTimeSeconds() < 4.9) {
+            kick.retract();
+        }
+        if(pathTimer.getElapsedTimeSeconds() > 4.9 && pathTimer.getElapsedTimeSeconds() < 5.3){
+            sorter.setOutC();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 5.3 && pathTimer.getElapsedTimeSeconds() < 6.0) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 6.0 && pathTimer.getElapsedTimeSeconds() < 6.7) {
+            kick.retract();
+        }
+        if(pathTimer.getElapsedTimeSeconds() > 6.7 && pathTimer.getElapsedTimeSeconds() < 7.1){
+            sorter.setOutB();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 7.1 && pathTimer.getElapsedTimeSeconds() < 7.8) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 7.8 && pathTimer.getElapsedTimeSeconds() < 8.5) {
+            kick.retract();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 8.5) {
+            sorter.setIntakeA();
+        }
+    }
+    public void GPP() {
+        telemetry.addData("Time", pathTimer.getElapsedTimeSeconds());
+        if (pathTimer.getElapsedTimeSeconds() > 3.5 && pathTimer.getElapsedTimeSeconds() < 4.2) {
+            telemetry.addLine("Kicking");
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 4.2 && pathTimer.getElapsedTimeSeconds() < 4.9) {
+            kick.retract();
+        }
+        if(pathTimer.getElapsedTimeSeconds() > 4.9 && pathTimer.getElapsedTimeSeconds() < 5.3){
+            sorter.setOutA();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 5.3 && pathTimer.getElapsedTimeSeconds() < 6.0) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 6.0 && pathTimer.getElapsedTimeSeconds() < 6.7) {
+            kick.retract();
+        }
+        if(pathTimer.getElapsedTimeSeconds() > 6.7 && pathTimer.getElapsedTimeSeconds() < 7.1){
+            sorter.setOutB();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 7.1 && pathTimer.getElapsedTimeSeconds() < 7.8) {
+            kick.kick();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 7.8 && pathTimer.getElapsedTimeSeconds() < 8.5) {
+            kick.retract();
+        }
+        if (pathTimer.getElapsedTimeSeconds() > 8.5) {
             sorter.setIntakeA();
         }
     }
@@ -308,6 +411,7 @@ public class BlueAutoBack extends OpMode {
         kick.init(hardwareMap);
         intake.init(hardwareMap);
         drive.init(hardwareMap);
+        ll.init(hardwareMap);
         buildPaths();
         follower.setPose(startPose);
     }
